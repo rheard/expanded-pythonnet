@@ -299,7 +299,8 @@ def get_wrapper_class(klass):
         #   eg netforms.drawing or netforms.controls
         calling_frame = inspect.stack()[1]
         calling_module = inspect.getmodule(calling_frame[0])
-        WrapperClass.__module__ = calling_module.__name__
+        WrapperClass.__module__ = calling_module.__name__ \
+            if calling_module else '__main__'  # We were called from the command line, for testing...
 
         __WRAPPER_CLASSES[klass] = WrapperClass
 
