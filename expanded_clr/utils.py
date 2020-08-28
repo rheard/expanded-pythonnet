@@ -258,13 +258,14 @@ def get_wrapper_class(klass):
                 return super(WrapperClass, self).__setattr__(name, value)
 
             def __getitem__(self, item):
-                return self.instance[item]
+                return converters.ValueConverter.to_python(self.instance[item])
 
             def __setitem__(self, item, value):
+                # TODO: We'll need to convert value here. But we need to know the target type...
                 self.instance[item] = value
 
             def __iter__(self):
-                return iter(self.instance)
+                return (converters.ValueConverter.to_python(x) for x in iter(self.instance))
 
             def __eq__(self, other):
                 other_instance = getattr(other, 'instance', other)
