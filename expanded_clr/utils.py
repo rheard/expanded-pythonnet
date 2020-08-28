@@ -173,12 +173,13 @@ def get_wrapper_class(klass):
             events = set()
             nested = set()
             constructors = list()
+            instance = None
 
             def __init__(self, *args, instance=None, **kwargs):
                 if instance is not None:
                     # We were given an instance, simple.
                     self.instance = instance
-                else:
+                elif not self.instance:  # If instance already exists but wasn't provided, then we've already inited
                     # We were not provided an instance but were given args,
                     #   so we must try to match the arguments to one of the constructors
                     for arg_types in self.constructors:
