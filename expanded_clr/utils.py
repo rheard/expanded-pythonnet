@@ -33,7 +33,12 @@ def get_class_from_name(klass_name, base_module=clr):
     if not attr:
         # Now we need to handle nested types.
         splitted = klass_name.split('+', 1)
-        attr = getattr(base_module, splitted[0])
+        attr = getattr(base_module, splitted[0], None)
+
+        # This must be a private subclass, like BoolCondition of Condition. Return the next best thing.
+        if not attr:
+            return base_module
+
         if len(splitted) > 1:
             return get_class_from_name(splitted[1], attr)
 
