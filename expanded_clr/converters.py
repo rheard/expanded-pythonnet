@@ -54,6 +54,10 @@ class ValueConverter(object):
             # This is an array or a collection, so just use the WrappedListConverter
             return WrappedListConverter(utils.get_class_from_name(klass.ToString()))
 
+        if klass.Equals(System.Object):
+            # Any object will do, so use no special converter...
+            return None
+
         for converter in cls.__subclasses__():
             for klass_ in converter.klasses:
                 if klass.Equals(klass_) or klass.IsSubclassOf(klass_):
