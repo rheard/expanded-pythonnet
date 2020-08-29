@@ -264,6 +264,9 @@ def get_wrapper_class(klass):
                 # TODO: We'll need to convert value here. But we need to know the target type...
                 self.instance[item] = value
 
+            def __len__(self):
+                return getattr(self.instance, 'Count')
+
             def __iter__(self):
                 return (converters.ValueConverter.to_python(x) for x in iter(self.instance))
 
@@ -271,6 +274,12 @@ def get_wrapper_class(klass):
                 other_instance = getattr(other, 'instance', other)
 
                 return self.instance.__eq__(other_instance)
+
+            def __hash__(self):
+                return hash(self.instance)
+
+            def __bool__(self):
+                return bool(self.instance)
 
         for field in WrapperClass.clrtype.GetMembers(
                 # The default search will get public items only, protected not included. We want everything
