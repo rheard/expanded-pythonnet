@@ -304,20 +304,20 @@ class NamedTupleConverter(ValueConverter):
 
 class PaddingConverter(NamedTupleConverter):
     klasses = {System.Windows.Forms.Padding}
-    python_klass = datatypes.Padding
+    python_klass = datatypes.windows.Padding
 
 
 class PointConverter(NamedTupleConverter):
     klasses = {System.Drawing.Point, System.Drawing.PointF}
-    python_klass = datatypes.Point
+    python_klass = datatypes.drawing.Point
 
 
 class SizeConverter(NamedTupleConverter):
     klasses = {System.Drawing.Size, System.Drawing.SizeF}
-    python_klass = datatypes.Size
+    python_klass = datatypes.drawing.Size
 
 
 class RectangleConverter(NamedTupleConverter):
     klasses = {System.Drawing.Rectangle}
-    python_klass = datatypes.Rectangle
+    python_klass = datatypes.drawing.Rectangle
 # endregion

@@ -2,13 +2,8 @@
 
 from clr import System
 
-from .utils import csharp_namedtuple, get_wrapper_class, wrap_python_method
-
-
-Padding = csharp_namedtuple('Padding', 'Left Top Right Bottom')
-Point = csharp_namedtuple('Point', 'X Y')
-Size = csharp_namedtuple('Size', 'Width Height')
-Rectangle = csharp_namedtuple('Rectangle', 'Location Size')
+from . import drawing, windows
+from ..utils import get_wrapper_class, wrap_python_method
 
 
 class EventHandler(get_wrapper_class(System.EventHandler)):
