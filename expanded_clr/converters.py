@@ -262,6 +262,54 @@ class DateTimeTypeConverter(ValueConverter):
                            value.Millisecond * 1000, tzinfo)
 
 
+class TimeDeltaTypeConverter(ValueConverter):
+    """
+    Converts between System.TimeSpan and datetime.timedelta
+
+    Accepted types are:
+        timedelta: Will be converted.
+        datetime: Will be converted to a timedelta by finding the difference between the given datetime and now.
+        float or int: The number of seconds. Can be infinity for the max timedelta.
+    """
+    klasses = {System.TimeSpan}
+
+    def to_csharp(self, value, force=False):
+        if isinstance(value, self.klass):
+            return value
+
+        if not isinstance(value, (dt.timedelta, dt.datetime, int, float)):
+            raise TypeError(value)
+
+        if value == float('inf'):
+            value = dt.timedelta.max
+        elif isinstance(value, dt.datetime):
+            now = dt.datetime.now()
+            if now > value:
+                value = now - value
+            elif value < now:
+                value -= now
+        elif isinstance(value, (float, int)):
+            value = dt.timedelta(seconds=value)
+
+        days = value.days
+        hours = value.seconds // 60**2
+        minutes = value.seconds // 60
+        seconds = value.seconds % 60
+        milliseconds = value.microseconds // 1000
+
+        return self.klass(days, hours, minutes, seconds, milliseconds)
+
+    @classmethod
+    def to_python(cls, value):
+        return dt.timedelta(
+            days=value.Days,
+            seconds=value.Seconds,
+            milliseconds=value.Milliseconds,
+            minutes=value.Minutes,
+            hours=value.Hours,
+        )
+
+
 # region Namedtuple Converters
 class NamedTupleConverter(ValueConverter):
     """
